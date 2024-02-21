@@ -6,6 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 const Calendar = ({ id, placeholder, handleFieldChange, data }) => {
+
   return (
     <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
       <TextField
@@ -26,16 +27,18 @@ const Calendar = ({ id, placeholder, handleFieldChange, data }) => {
         disabled
       />
       <DatePicker
-  selected={data[id] ? new Date(data[id]) : null}
-  onChange={(date) => handleFieldChange(id, date)}
-  showYearDropdown
-  scrollableYearDropdown
-  yearDropdownItemNumber={15}
-  showMonthDropdown
-  dropdownMode="select"
-  customInput={<CalendarMonthIcon style={{ fontSize: '50px' }} />}
-  dateFormat="dd/MM/yyyy"  // Set the desired date format
-   />
+      selected={data[id] ? new Date(data[id]) : null}
+      onChange={(date) => handleFieldChange(id, date)}
+      showYearDropdown
+      scrollableYearDropdown
+      yearDropdownItemNumber={15}
+      showMonthDropdown
+      dropdownMode="select"
+      customInput={<CalendarMonthIcon style={{ fontSize: '50px', cursor: 'pointer' }}
+        />}
+      dateFormat="dd/MM/yyyy"  // Set the desired date format
+      popperPlacement="bottom-end" // Adjust the position of the date picker
+    />
     </Box>
   );
 };

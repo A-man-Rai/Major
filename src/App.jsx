@@ -6,10 +6,9 @@ import FindAccount from "./components/LoginAndRegister/FindAccount/FindAccount";
 import NewPassword from "./components/LoginAndRegister/FindAccount/NewPassword";
 import Dashboard from "./components/UserDashboard/Dashboard";
 import AccountAlreadyLinked from "./components/LoginAndRegister/SignUp/AccountAlreadyLinked";
-import ApplicationForm from "./components/RapForm/ApplicationFrom";
-import DocumentUploads from "./components/RapForm/DocumentUploads";
+import ApplicationForm from "./components/RapForm/ApplicationForm";
 import ApplicationSubmitted from "./components/RapForm/ApplicationSubmitted";
-import ApplicationFilled from "./components/UserDashboard/AlreadyFilled";
+import AdminDashboard from "./components/Admin/Dashboard/AdminDashboard";
 import {
 
   createBrowserRouter,
@@ -50,16 +49,12 @@ function App() {
     element:<ApplicationForm></ApplicationForm>
   },
   {
-    path:"/rap/doc",
-    element:<DocumentUploads></DocumentUploads>
-  },
-  {
    path:"/submitted",
    element:<ApplicationSubmitted></ApplicationSubmitted>
   },
-  {
-    path:"/found",
-    element:<ApplicationFilled></ApplicationFilled>
+   {
+    path:"/admin/dashboard",
+    element:<AdminDashboard></AdminDashboard>
    }
 
   ]);
