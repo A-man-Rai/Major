@@ -59,6 +59,34 @@ const Dashboard = () => {
   useEffect(()=>{
    fetchApplications();
   },[records])
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/verify`,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            },
+            withCredentials: true,
+          }
+        );
+        console.log(response.data);
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          dispatch(setSession(true));
+         // console.log('Token expired. Please log in again.');
+        } else {
+          console.error('An error occurred:', error);
+        }
+      }
+    };
+    checkSession(); 
+    const intervalTime = 1 * 60 * 1000;
+    const intervalId = setInterval(checkSession, intervalTime);
+    return () => clearInterval(intervalId);
+  }, []); 
+  
 
   const fetchApplications = async () => {
     try {
@@ -79,7 +107,7 @@ const Dashboard = () => {
     catch (error) {
       if (error.response && error.response.status === 401) {
          dispatch(setSession(true));
-        console.log('Token expired. Please log in again.');
+       // console.log('Token expired. Please log in again.');
       } else {
         console.error('An error occurred:', error);
       }

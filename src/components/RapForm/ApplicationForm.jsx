@@ -77,7 +77,7 @@ export default function ApplicationForm({setShowSubmitted,setShowForm,setRecords
     } catch (error) {
       if (error.response && error.response.status === 401) {
          dispatch(setSession(true));
-        console.log('Token expired. Please log in again.');
+       // console.log('Token expired. Please log in again.');
       } else {
         console.error('An error occurred:', error);
       }
