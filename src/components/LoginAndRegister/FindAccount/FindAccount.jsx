@@ -39,8 +39,10 @@ export default function FindAccount() {
     const response = await axios.post('http://localhost:9000/forgotpassword',data, {
      withCredentials: true,
      });
-     if(response.data.invalidEmail)dispatch(setInvalidEmail(true));
-     
+    console.log(response.data);
+     if(response.data.invalidEmail){
+      dispatch(setInvalidEmail(true));
+      }
      else if(response.data.otpsend){
      dispatch(setForgotPassword(true));
        navigate("/otp");

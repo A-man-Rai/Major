@@ -15,18 +15,20 @@ import axios from 'axios';
 import { setSession } from '../ReduxStore/slices/ValidUserSlice';
 import EditApplicationForm from '../RapForm/EditApplicationForm';
 import SessionExpired from './SessionExpired';
+
 const defaultTheme = createTheme();
 const Dashboard = () => {
   const dispatch=useDispatch();
   const [showForm,setShowForm]=useState(true);
   const [showDownload,setShowDownload]=useState(false);
   const[showStatus,setShowStatus]=useState(false);
-
+  const [links,setLinks]=useState([]);
   const[submitted,setShowSubmitted]=useState(false);
 
   const[details,setDetails]=useState(false);
   const[application,setApplication]=useState({});
  const [edit,setEdit]=useState(false);
+ const[editImages,setEditImages]=useState([]);
 
   const handleApply=async()=>{
     setEdit(false)
@@ -44,6 +46,7 @@ const Dashboard = () => {
     setShowForm(false);  
     setShowDownload(true); 
   }
+
   const handleStatus=async()=>{
     setEdit(false)
     setDetails(false)
@@ -52,7 +55,7 @@ const Dashboard = () => {
     setShowDownload(false); 
     setShowStatus(true);
   }
-  
+
   const [records,setRecords]=useState([]);
   const userId=useSelector(state=>state.validUser.userId);
   const token=useSelector(state=>state.validUser.token)
@@ -71,7 +74,6 @@ const Dashboard = () => {
             withCredentials: true,
           }
         );
-        console.log(response.data);
       } catch (error) {
         if (error.response && error.response.status === 401) {
           dispatch(setSession(true));
@@ -99,7 +101,7 @@ const Dashboard = () => {
             withCredentials: true,
           }
         );
-  
+       console.log(response.data.userApplications);
         if (JSON.stringify(response.data.userApplications) !== JSON.stringify(records)) {
           setRecords(response.data.userApplications);      
         }     
@@ -181,9 +183,9 @@ const Dashboard = () => {
            <SessionExpired/>
           {showForm && <ApplicationForm setShowSubmitted={setShowSubmitted} setShowForm={setShowForm} setRecords={setRecords}></ApplicationForm>}
           {submitted && <ApplicationSubmitted   setShowSubmitted={setShowSubmitted} setShowForm={setShowForm}></ApplicationSubmitted>}
-          {showStatus && <AllUserApplications  setEdit={setEdit}  setShowStatus={setShowStatus}  setApplication={setApplication} setDetails={setDetails} records={records}></AllUserApplications>}
-          {details && <AllDetails application={application} setShowStatus={setShowStatus} setDetails={setDetails}></AllDetails>}
-          {edit && <EditApplicationForm application={application} setEdit={setEdit} setShowSubmitted={setShowSubmitted} setRecords={setRecords}></EditApplicationForm>}
+          {showStatus && <AllUserApplications setEditImages={setEditImages}  setEdit={setEdit}  setShowStatus={setShowStatus}  setApplication={setApplication} setDetails={setDetails} records={records} setLinks={setLinks}></AllUserApplications>}
+          {details && <AllDetails application={application} setShowStatus={setShowStatus} setDetails={setDetails} links={links}></AllDetails>}
+          {edit && <EditApplicationForm setEditImages={setEditImages} editImages={editImages} application={application} setEdit={setEdit} setShowSubmitted={setShowSubmitted} setRecords={setRecords}></EditApplicationForm>}
       </Container>
     </ThemeProvider>
   );

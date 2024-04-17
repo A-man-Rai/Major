@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Typography, Paper, Box, Grid, Button } from '@mui/material';
 import { formatDate } from '../Admin/Records/dateFormat.js';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useSelector } from 'react-redux';
+import ShowDocuments from './ShowDocuments.jsx';
 
-
-const AllDetails = ({application,setDetails,setShowStatus}) => {
+const AllDetails = ({application,setDetails,setShowStatus,links}) => {
   const styles = {
     paper: {
       padding: '20px',
@@ -21,7 +22,14 @@ const AllDetails = ({application,setDetails,setShowStatus}) => {
       marginBottom: '10px',
     },
   };
-
+  const email=useSelector(state=>state.register.email)
+  const starting="https://firebasestorage.googleapis.com/v0/b/documentsupload-e023f.appspot.com/o/"
+  const arr=email.split("@");
+  const folder=arr[0];
+  const link=links.userImages
+  const images=[{link:starting + folder + link[0].link,name:"first"},
+               {link:starting + folder + link[1].link,name:"second"},
+               {link:starting + folder + link[2].link,name:"third"}]
 
   return (
     <Box>
@@ -83,6 +91,7 @@ const AllDetails = ({application,setDetails,setShowStatus}) => {
             <Box style={styles.field}>
             <Typography>Visa Valid Upto: {formatDate(application.visaValidUpto)}</Typography>
             </Box>
+            <ShowDocuments images={images}></ShowDocuments>
           </Grid>
         </Grid>
       </Paper>

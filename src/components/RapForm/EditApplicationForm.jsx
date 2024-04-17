@@ -11,21 +11,26 @@ import Calendar from './Calendar';
 import axios from 'axios';
 import { useSelector,useDispatch } from 'react-redux';
 import { setSession } from '../ReduxStore/slices/ValidUserSlice';
-export default function EditApplicationForm({application,setEdit,setShowSubmitted,setRecords}) {
+import UploadDone from './UploadDone';
+import UploadEditButton from "./UploadEditButton"
+import ShowDocuments from '../UserDashboard/ShowDocuments';
+export default function EditApplicationForm({setEditImages,editImages,application,setEdit,setShowSubmitted,setRecords}) {
+// console.log(editImages);
   useEffect(() => {
   window.scrollTo(0, 0);
 }, []);
 const dispatch=useDispatch();
 const token=useSelector(state=>state.validUser.token);
+
   const [data, setData] = useState({
-    id:application._id,
+    id:application.id,
     name:application.name,
     dob: application.dob,
     occupation:application.occupation,
     nationality:application.nationality,
     passportNo:application.passportNo,
-    dateOfIssue:application. passportDateOfIssue,
-    validUpTo:application.passportValidUpto,
+    passportDateOfIssue:application. passportDateOfIssue,
+    passportValidUpto:application.passportValidUpto,
     ilpNo:application. ilpNo,
     visaNo: application.visaNo,
     visaIssue:application.visaIssue,
@@ -33,7 +38,7 @@ const token=useSelector(state=>state.validUser.token);
     residentialAddress:application. residentialAddress,
     dateOfVisit: application. dateOfVisit,
     durationOfStay: application.durationOfStay,
-    travelArrangement: application.travelArrangementBy,
+    travelArrangementBy: application.travelArrangementBy,
   });
   const handleFieldChange = (field, value) => {
     setData({
@@ -71,7 +76,17 @@ const token=useSelector(state=>state.validUser.token);
       boxShadow: '0 4px 8px rgba(0.4, 0.4, 0.4, 0.4)',
     }
   };
- 
+ const[image1,setImage1]=useState(null);
+ const[image2,setImage2]=useState(null);
+ const[image3,setImage3]=useState(null);
+ const email=useSelector(state=>state.register.email)
+ const starting="https://firebasestorage.googleapis.com/v0/b/documentsupload-e023f.appspot.com/o/"
+ const arr=email.split("@");
+ const folder=arr[0];
+ const images=[{link:starting + folder + editImages[0].link,name:"first"},
+              {link:starting + folder + editImages[1].link,name:"second"},
+              {link:starting + folder + editImages[2].link,name:"third"}]
+            console.log(images);
   return (
     <React.Fragment>
       <CssBaseline />
@@ -101,10 +116,10 @@ const token=useSelector(state=>state.validUser.token);
          
           <Box display="flex" flexDirection="row" gap={2}>
           <Field id={"passportNo"} placeholder={"Passport No"} handleFieldChange={handleFieldChange} data={data}/>
-          <Calendar id={"dateOfIssue"} placeholder={"Date Of Issue"} handleFieldChange={handleFieldChange} data={data} ></Calendar>
+          <Calendar id={"passportDateOfIssue"} placeholder={"Date Of Issue"} handleFieldChange={handleFieldChange} data={data} ></Calendar>
            </Box>
 
-          <Calendar id={"validUpTo"} placeholder={"Valid up to"} handleFieldChange={handleFieldChange} data={data} ></Calendar>
+          <Calendar id={"passportValidUpto"} placeholder={"Valid up to"} handleFieldChange={handleFieldChange} data={data} ></Calendar>
           <Field id={"ilpNo"} placeholder={"I.L.P. No"} handleFieldChange={handleFieldChange} data={data}/>
           <Typography sx={{mt:1,mb:1,fontWeight:400}}> Visa Details:</Typography>
 
@@ -119,11 +134,19 @@ const token=useSelector(state=>state.validUser.token);
          
           <Calendar id={"durationOfStay"} placeholder={"Duration of stay "} handleFieldChange={handleFieldChange} data={data}></Calendar>
 
-          <Field id={"travelArrangement"} placeholder={"Travel arrangement made by"} handleFieldChange={handleFieldChange} data={data}/>
+          <Field id={"travelArrangementBy"} placeholder={"Travel arrangement made by"} handleFieldChange={handleFieldChange} data={data}/>
+         
+          <Box display="flex" justifyContent="space-evenly" mt={3}>
+          <ShowDocuments images={images}></ShowDocuments>
+          {image1 ?<UploadDone set={setImage1}/>: <UploadEditButton formId={editImages[0].formId} setEditImages={setEditImages} id={editImages[0].id} name="PASSPORT" set={setImage1} /> }
+          {image2 ?<UploadDone set={setImage2}/>: <UploadEditButton formId={editImages[1].formId} setEditImages={setEditImages} id={editImages[1].id} name="VISA" set={setImage2}/> }
+          {image3 ?<UploadDone set={setImage3}/>: <UploadEditButton formId={editImages[2].formId} setEditImages={setEditImages} id={editImages[2].id} name="ILP" set={setImage3}/>}
+          </Box>
+         
          <Box display="flex" justifyContent="center" alignItems="center" mt={3}>
          <Button variant='contained' onClick={handleSubmit} color='success'>SUBMIT</Button>
          </Box>
-       
+        
         </Paper>
       </Container>
     </React.Fragment>

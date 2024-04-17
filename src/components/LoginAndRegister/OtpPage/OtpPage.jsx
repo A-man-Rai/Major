@@ -105,6 +105,7 @@ export default function OtpPage() {
     setCodeCountdown(299);
     startCountdown();
     if(forgotpassword){
+      console.log("i am here and there");
       const data={
         email:email
       }
@@ -113,6 +114,7 @@ export default function OtpPage() {
         });
      }
      else{
+      console.log("i am here");
       const data={
       firstname:firstname,
       surname:surname,
@@ -138,7 +140,7 @@ export default function OtpPage() {
       const response = await axios.post('http://localhost:9000/forgotpassword/confirm',data, {
         withCredentials: true,
       });
-      
+      console.log(response.data)
       if(response.data.validOtp){
        navigate("/newpassword");
       }

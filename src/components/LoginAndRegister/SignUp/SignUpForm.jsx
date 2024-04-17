@@ -13,6 +13,7 @@ import axios from 'axios';
 import { useDispatch} from "react-redux";
 import { setEmail,setFirstname,setNationality,setPassword,setSurname } from '../../ReduxStore/slices/RegisterSlice.js';
 import { LoadingButton } from '@mui/lab';
+
 export default function SignUpForm({setInvalidPassEmail}) {
 
   const dispatch=useDispatch();
@@ -25,7 +26,7 @@ export default function SignUpForm({setInvalidPassEmail}) {
     password: '',
     nationality: '',
   });
-
+  
   const [nationalityValue, setNationalityValue] = React.useState(null);
 
   const handleClickOpen = () => {
@@ -69,7 +70,9 @@ export default function SignUpForm({setInvalidPassEmail}) {
       const response = await axios.post('http://localhost:9000/register', formData, {
         withCredentials: true,
        });
-       if(response.data.alreadyRegistered) navigate("/linked");
+       if(response.data.alreadyRegistered){
+         navigate("/linked");
+       } 
        
        dispatch(setPassword(response.data.hash)); //hash
        if(response.data.otpsend){

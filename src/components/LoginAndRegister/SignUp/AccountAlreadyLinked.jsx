@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import { Divider, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CommonNavbar from '../../CommonNavbar';
+
 export default function AccountAlreadyLinked() {
 
   const navigate=useNavigate();

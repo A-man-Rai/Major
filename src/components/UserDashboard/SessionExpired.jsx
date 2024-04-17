@@ -8,12 +8,16 @@ import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+
+
 export default function SessionExpired({ }) {
 const sessionExpired=useSelector(state=>state.validUser.sessionEnded);
 const navigate=useNavigate();  
 const dispatch=useDispatch();
+
 const handleClose = () => {
-    navigate("/login");
+    navigate("/",{replace:true});
+   
     dispatch(setSession(false));
   };
   return (

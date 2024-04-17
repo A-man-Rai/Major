@@ -14,13 +14,15 @@ import axios from 'axios';
 import {Alert} from '@mui/material';
 import { useState } from 'react';
 import { useDispatch,  } from 'react-redux';
-import { setFirstname,setSurname } from '../../ReduxStore/slices/RegisterSlice';
+import { setFirstname,setSurname,setEmail } from '../../ReduxStore/slices/RegisterSlice';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { setUserId,setToken } from '../../ReduxStore/slices/ValidUserSlice';
+
 const defaultTheme = createTheme();
 
 export default function Form() {
   const dispatch=useDispatch();
+  
    const[loading,setLoading]=useState(false);
   const handleSubmit = async(event) => {
     setLoading(true);
@@ -29,13 +31,15 @@ export default function Form() {
     const response = await axios.post('http://localhost:9000/login', formValues, {
       withCredentials: true,
     });
-   
+   // console.log(response.data)
     if(response.data.validUser){
+   
       dispatch(setToken(response.data.token))
       dispatch(setFirstname(response.data.user.firstname));
       dispatch(setSurname(response.data.user.surname));
       dispatch(setUserId(response.data.user.id));
-      navigate("/login/dashboard");
+      dispatch(setEmail(response.data.user.email))
+      navigate("/login/dashboard",{replace:true});
     }
     else if(response.data.invalidUser){
        setInvalidPassEmail(true);

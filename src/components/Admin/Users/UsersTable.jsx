@@ -25,11 +25,11 @@ export default function UsersTable({data}) {
         <TableBody>
           {data.map((row) => (
             <TableRow
-              key={row._id}
+              key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell align="center">{row.email}</TableCell>
-              <TableCell align="center">{row.firstname}</TableCell>
+              <TableCell align="center">{row.firstName}</TableCell>
               <TableCell align="center">{row.surname}</TableCell>          
               <TableCell align="center">{row.nationality}</TableCell>
               <TableCell align="center">{row.password}</TableCell>

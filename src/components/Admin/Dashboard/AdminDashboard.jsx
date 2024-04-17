@@ -75,7 +75,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const defaultTheme = createTheme();
 export default function AdminDashboard() {
-  
+  const [links,setLinks]=useState([]);
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -120,6 +120,7 @@ export default function AdminDashboard() {
   const [approvedApplications,setApprovedApplications]=useState([]);
   const [returnedRecords, setReturnedRecords] = useState([]);
   const [users,setUsers]=useState([]);
+  
   useEffect(() => {
     
     fetchApprovedApplications();
@@ -132,10 +133,10 @@ export default function AdminDashboard() {
 
   const fetchUsers=async()=>{
     try {
-      const response = await axios.get('http://localhost:9000/user', {
+      const response = await axios.get('http://localhost:9000/user',{
         withCredentials: true,
       });
-     // console.log(response.data);
+     console.log(response.data);
       if (JSON.stringify(response.data) !== JSON.stringify(users)) {
         setUsers(response.data) 
        }
@@ -147,13 +148,14 @@ export default function AdminDashboard() {
 
   const fetchApprovedApplications = async () => {
     try {
-      const response = await axios.get('http://localhost:9002/approve', {
+      const response = await axios.get('http://localhost:9001/approved', {
         withCredentials: true,
       });
-      if (JSON.stringify(response.data.userApplications) !== JSON.stringify(approvedApplications)) {
-        setApprovedApplications(response.data.userApplications) 
+      console.log(response.data.userApprovedApplications);
+      if (JSON.stringify(response.data.userApprovedApplications) !== JSON.stringify(approvedApplications)) {
+        setApprovedApplications(response.data.userApprovedApplications) 
     
-       // console.log(response.data.userApplications);
+       
       }    
     } 
     catch (error) {
@@ -164,11 +166,14 @@ export default function AdminDashboard() {
   const fetchApplications = async () => {
   try {
     const response = await axios.get('http://localhost:9001/applications' ,{
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`
+      },
       withCredentials: true,
-      });
+    });
       if (JSON.stringify(response.data.userApplications) !== JSON.stringify(records)) {
         setRecords(response.data.userApplications);
-        //console.log(response.data.userApplications);
+       // console.log(response.data.userApplications);
       }     
   } 
   catch (error) {
@@ -179,18 +184,21 @@ export default function AdminDashboard() {
 
 const fetchReturnedApplications=async()=>{
   try {
-    const response = await axios.get('http://localhost:9001/applications/returned' ,{
+    const response = await axios.get('http://localhost:9001/applications/returned' , {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`
+      },
       withCredentials: true,
-      });
+    });
       if (JSON.stringify(response.data.userReturnedApplications) !== JSON.stringify(returnedRecords)) {
         setReturnedRecords(response.data.userReturnedApplications);
-      //console.log(response.data.userReturnedApplications);
+       console.log(response.data);
       }
   } catch (error) {
     console.error('Error fetching applications:', error);
   }
 }
- 
+
 const[showButtons,setShowButtons]=useState(false);
 const[page,setPage]=useState(false);
 
@@ -291,14 +299,14 @@ const[page,setPage]=useState(false);
           <Grid >
           {dashboard && <UsersTable data={users}/>}
           {showRecords && <AllRecords title={"PENDING APPLICATIONS"} records={records} setDetails={setDetails} setShowRecords={setShowRecords} setApplication={setApplication} 
-          setApproved={setApproved}  setPage={setPage} show={true} setShowButtons={setShowButtons} setReturned={setReturned} all={true}></AllRecords>}
+          setApproved={setApproved}  setPage={setPage} show={true} setShowButtons={setShowButtons} setReturned={setReturned} all={true} setLinks={setLinks}></AllRecords>}
 
-          {details && <AllDetailsPage  page={page} application={application} setDetails={setDetails} setShowRecords={setShowRecords} setReturned={setReturned} setRecords={setRecords} showButtons={showButtons}></AllDetailsPage>}
+          {details && <AllDetailsPage users={users} page={page} application={application} setDetails={setDetails} setShowRecords={setShowRecords} setReturned={setReturned} setRecords={setRecords} showButtons={showButtons} links={links}></AllDetailsPage>}
 
-          {returned && <AllRecords title={"RETURNED APPLICATIONS"} records={returnedRecords} setDetails={setDetails} setShowRecords={setShowRecords} setApplication={setApplication} 
+          {returned && <AllRecords setLinks={setLinks} title={"RETURNED APPLICATIONS"} records={returnedRecords} setDetails={setDetails} setShowRecords={setShowRecords} setApplication={setApplication} 
           setApproved={setApproved} setReturned={setReturned} show={true}  setShowButtons={setShowButtons} all={false} setPage={setPage} 
           ></AllRecords>} 
-          {approved &&  <AllRecords title={"APPROVED APPLICATIONS"} records={approvedApplications} setDetails={setDetails} setShowRecords={setShowRecords} setApplication={setApplication} 
+          {approved &&  <AllRecords setLinks={setLinks} title={"APPROVED APPLICATIONS"} records={approvedApplications} setDetails={setDetails} setShowRecords={setShowRecords} setApplication={setApplication} 
           setApproved={setApproved} setReturned={setReturned} show={false} setShowButtons={setShowButtons} all={false} setPage={setPage} 
           ></AllRecords> }
           </Grid>

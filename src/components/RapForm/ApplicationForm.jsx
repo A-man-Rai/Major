@@ -11,15 +11,26 @@ import Calendar from './Calendar';
 import { useSelector ,useDispatch} from 'react-redux';
 import { setSession } from '../ReduxStore/slices/ValidUserSlice';
 import axios from 'axios';
+import UploadButton from "./UploadButton"
+import UploadDone from './UploadDone';
+import {imageDB} from "../../firebaseConfig.js"
+import {ref,uploadBytes,getDownloadURL} from "firebase/storage"
+
+
 export default function ApplicationForm({setShowSubmitted,setShowForm,setRecords}) {
   useEffect(() => {
   window.scrollTo(0, 0);
 }, []);
+const [image1,setImage1]=useState(null);
+const [image2,setImage2]=useState(null);
+const [image3,setImage3]=useState(null);
   const dispatch=useDispatch();
   const userId=useSelector(state=>state.validUser.userId);
   const token=useSelector(state=>state.validUser.token);
+  const email=useSelector(state=>state.register.email)
+
   const [data, setData] = useState({
-    userId:userId,
+    userId:parseInt(userId),
     name: "",
     dob: "",
     occupation:"",
@@ -35,6 +46,9 @@ export default function ApplicationForm({setShowSubmitted,setShowForm,setRecords
     dateOfVisit: "",
     durationOfStay: "",
     travelArrangement: "",
+    urlA:"",
+    urlB:"",
+    urlC:""
   });
 
   const handleFieldChange = (field, value) => {
@@ -42,11 +56,12 @@ export default function ApplicationForm({setShowSubmitted,setShowForm,setRecords
       ...data,
       [field]: value,
     });
+   
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       if (
         data.dob !== "" &&
@@ -55,8 +70,30 @@ export default function ApplicationForm({setShowSubmitted,setShowForm,setRecords
         data.visaIssue !== "" &&
         data.visaValidUpto !== "" &&
         data.dateOfVisit !== "" &&
-        data.durationOfStay !== ""
+        data.durationOfStay !== "" &&
+        image1!=null &&
+        image2!=null &&
+        image3!=null 
       ) {
+        const arr=email.split("@");
+        const folder=arr[0];
+        const image1Ref=ref(imageDB,`${folder}/${Date.now()}-${image1.name}`)
+        const image2Ref=ref(imageDB,`${folder}/${Date.now()}-${image2.name}`)
+        const image3Ref=ref(imageDB,`${folder}/${Date.now()}-${image3.name}`)
+
+        const a= await uploadBytes(image1Ref,image1)
+        const b= await uploadBytes(image2Ref,image2)
+        const c= await uploadBytes(image3Ref,image3)
+        const urlA=await getDownloadURL(a.ref)
+        const urlB=await getDownloadURL(b.ref)
+        const urlC=await getDownloadURL(c.ref)
+          const array1=urlA.split(folder)
+          const array2=urlB.split(folder)
+          const array3=urlC.split(folder)
+          data.urlA=array1[1];
+          data.urlB=array2[1];
+          data.urlC=array3[1];
+         // console.log(array1)
         const response = await axios.post(
           'http://localhost:9001/submit',
           data,
@@ -140,6 +177,11 @@ export default function ApplicationForm({setShowSubmitted,setShowForm,setRecords
           <Calendar id={"durationOfStay"} placeholder={"Duration of stay "} handleFieldChange={handleFieldChange} data={data}></Calendar>
 
           <Field id={"travelArrangement"} placeholder={"Travel arrangement made by"} handleFieldChange={handleFieldChange} data={data}/>
+          <Box display="flex" justifyContent="space-evenly">
+          {image1 ?<UploadDone set={setImage1}/>: <UploadButton name="PASSPORT" set={setImage1} /> }
+          {image2 ?<UploadDone set={setImage2}/>: <UploadButton name="VISA" set={setImage2}/> }
+          {image3 ?<UploadDone set={setImage3}/>: <UploadButton name="ILP" set={setImage3}/>}
+          </Box>
          <Box display="flex" justifyContent="center" alignItems="center" mt={3}>
          <Button variant='contained' type='submit' color='success'>SUBMIT</Button>
          </Box>

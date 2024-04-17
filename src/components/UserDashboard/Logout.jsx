@@ -5,21 +5,22 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUserId,setToken } from '../ReduxStore/slices/ValidUserSlice';
+
+
 export default function Logout() {
   const [open, setOpen] = React.useState(false);
   const navigate=useNavigate();
   const dispatch=useDispatch();
   const handleClickOpen = () => {setOpen(true);};
   const handleClose = () => {setOpen(false)};
-  
   const handleLogout=()=>{
     setOpen(false);
     dispatch(setUserId(""));
     dispatch(setToken(""));
-    navigate("/");
+    navigate("/",{replace:true});
   }
   const styles={    paper: {
     padding: '20px',

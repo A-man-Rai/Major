@@ -7,7 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useNavigate } from 'react-router-dom';
 import { useSelector ,useDispatch} from 'react-redux';
-import { setPassowordChanged } from '../../ReduxStore/slices/UserSlice';
+import { setPassowordChanged ,setForgotPassword} from '../../ReduxStore/slices/UserSlice';
 import { LoadingButton } from '@mui/lab';
 export default function ChangedPassword({loading}) {
 
@@ -18,11 +18,13 @@ const email=useSelector(state=>state.register.email);
 
  const handleClose = () => {
     dispatch(setPassowordChanged(false));
+    dispatch(setForgotPassword(false));
     navigate("/login")
   };
 
  const handleOk=()=>{
   dispatch(setPassowordChanged(false));
+  dispatch(setForgotPassword(false));
   navigate("/login")
  }
  const styles={    paper: {

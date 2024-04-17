@@ -25,6 +25,8 @@
     "@reduxjs/toolkit": "^2.1.0",
     "axios": "^1.6.7",
     "dayjs": "^1.11.10",
+    "dotenv": "^16.4.5",
+    "firebase": "^10.11.0",
     "markdown-to-jsx": "^7.4.0",
     "react": "^18.2.0",
     "react-datepicker": "^6.1.0",
@@ -33,7 +35,9 @@
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.21.3",
     "react-slick": "^0.30.1",
-    "slick-carousel": "^1.8.1"
+    "shortlnk": "^1.1.2",
+    "slick-carousel": "^1.8.1",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
@@ -45,6 +49,7 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "markdown-loader": "^8.0.0",
     "vite": "^5.0.8",
+    "vite-plugin-env": "^1.0.1",
     "vite-plugin-markdown": "^2.2.0"
   }
 }
