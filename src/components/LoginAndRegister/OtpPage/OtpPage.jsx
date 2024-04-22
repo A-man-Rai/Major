@@ -15,7 +15,7 @@ import { useState,useEffect } from 'react';
 import axios from 'axios';
 import CommonNavbar from '../../CommonNavbar';
 import { Link as RouterLink } from 'react-router-dom';
-
+import { setPassword } from '../../ReduxStore/slices/authSlice';
 export default function OtpPage() {
   const [code, setCode] = React.useState({
     code: '',
@@ -114,7 +114,7 @@ export default function OtpPage() {
         });
      }
      else{
-      console.log("i am here");
+      
       const data={
       firstname:firstname,
       surname:surname,
@@ -142,6 +142,7 @@ export default function OtpPage() {
       });
       console.log(response.data)
       if(response.data.validOtp){
+       dispatch(setPassword(true))
        navigate("/newpassword");
       }
       else if(response.data.wrongCode){

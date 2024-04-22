@@ -27,6 +27,7 @@ export default function ShowDocuments({ images }) {
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        
       >
         <DialogContent>
           <Carousel   showStatus={false} 

@@ -24,7 +24,8 @@ const userSlice= createSlice({
         },
         setPassowordChanged(state,action){
            state.passwordChanged=action.payload;
-        }
+        },
+      
     },
 });
 

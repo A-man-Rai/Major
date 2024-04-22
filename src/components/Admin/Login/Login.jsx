@@ -15,15 +15,20 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from "axios"
 import{ useNavigate }from "react-router-dom"
 import Alert from '@mui/material/Alert';
+import { useState } from 'react';
+import { setAdmin } from '../../ReduxStore/slices/authSlice';
+import { useDispatch } from 'react-redux';
 const defaultTheme = createTheme();
 
 export default function Login() {
+  const dispatch=useDispatch();
 const[input ,setInput]=React.useState({
     email:"",
     password:""
 })
-
+const[showError,setShowError]=useState(false);
 const handleInputChange=(e)=>{
+  setShowError(false);
   let id=e.target.id
   let value=e.target.value
   setInput(prev=>{
@@ -57,21 +62,22 @@ const handleInputChange=(e)=>{
   }
 const navigate=useNavigate()
   const handleLogin=async()=>{
-    const response = await axios.post('http://localhost:9002/login',input, {
+    const response = await axios.post('http://localhost:9000/admin/login',input, {
         withCredentials: true,
       });
-     // console.log(response.data);
+    // console.log(response.data);
       if(response.data.success){
         localStorage.setItem("token",response.data.token)
+        dispatch(setAdmin(true))
         navigate("/admin/dashboard")
       }
       else{
-          //show error
+          setShowError(true)
       }
 }
   const handleRegister=async()=>{
    // console.log("inside register");
-    const response = await axios.post('http://localhost:9002/register',input, {
+    const response = await axios.post('http://localhost:9000/admin/register',input, {
         withCredentials: true,
       });
     if(response.data.success){
@@ -124,7 +130,7 @@ const navigate=useNavigate()
               value={input.password}
               onChange={handleInputChange}
             />
-            <Alert severity="error">This is an error Alert.</Alert>
+            {showError && <Alert severity="error">Invalid Email or Password</Alert>}
            {login ? <Button
               type="submit"
               fullWidth

@@ -1,5 +1,5 @@
 import React from 'react';
-import { createBrowserRouter, RouterProvider,Route,Routes } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider} from 'react-router-dom';
 import Login from "./components/Admin/Login/Login"
 import Home from './components/Home/Home';
 import Form from './components/LoginAndRegister/Login/Form';
@@ -10,10 +10,12 @@ import Dashboard from './components/UserDashboard/Dashboard';
 import AccountAlreadyLinked from './components/LoginAndRegister/SignUp/AccountAlreadyLinked';
 import ApplicationSubmitted from './components/RapForm/ApplicationSubmitted';
 import AdminDashboard from './components/Admin/Dashboard/AdminDashboard';
-
-
+import ProtectedRoute from './components/ProtectedRoute';
+import ProtectIsLinked from "./components/ProtectIsLinked"
+import ProtectOtp from "./components/ProtectOtp"
+import ProtectPassword from "./components/ProtectPassword"
+import ProtectAdmin from "./components/ProtectAdmin"
 function App() {
-  
   const router = createBrowserRouter([
     {
       path: '/',
@@ -25,7 +27,7 @@ function App() {
     },
     {
       path: '/otp',
-      element:<OtpPage/>
+      element:<ProtectOtp><OtpPage/></ProtectOtp>
     },
     {
       path: '/find',
@@ -33,19 +35,15 @@ function App() {
     },
     {
       path: '/newpassword',
-      element: <NewPassword />
+      element: <ProtectPassword><NewPassword /></ProtectPassword>
     },
     {
       path: '/login/dashboard',
-      element:<Dashboard/>
+      element:<ProtectedRoute><Dashboard/></ProtectedRoute>
     },
     {
       path: '/linked',
-      element: <AccountAlreadyLinked />
-    },
-    {
-      path: '/submitted',
-      element: <ApplicationSubmitted />
+      element:<ProtectIsLinked><AccountAlreadyLinked /></ProtectIsLinked> 
     },
     {
       path: '/admin',
@@ -53,7 +51,7 @@ function App() {
     },
     {
       path: '/admin/dashboard',
-      element: <AdminDashboard/>
+      element:<ProtectAdmin> <AdminDashboard/></ProtectAdmin>
     }
   ]);
 

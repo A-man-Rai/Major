@@ -27,6 +27,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import axios from 'axios';
 import AllDetailsPage from '../Records/AllDetailsPage';
 import UsersTable from '../Users/UsersTable';
+import Logout from './Logout';
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -136,7 +137,7 @@ export default function AdminDashboard() {
       const response = await axios.get('http://localhost:9000/user',{
         withCredentials: true,
       });
-     console.log(response.data);
+   //  console.log(response.data);
       if (JSON.stringify(response.data) !== JSON.stringify(users)) {
         setUsers(response.data) 
        }
@@ -151,7 +152,7 @@ export default function AdminDashboard() {
       const response = await axios.get('http://localhost:9001/approved', {
         withCredentials: true,
       });
-      console.log(response.data.userApprovedApplications);
+     // console.log(response.data.userApprovedApplications);
       if (JSON.stringify(response.data.userApprovedApplications) !== JSON.stringify(approvedApplications)) {
         setApprovedApplications(response.data.userApprovedApplications) 
     
@@ -192,7 +193,7 @@ const fetchReturnedApplications=async()=>{
     });
       if (JSON.stringify(response.data.userReturnedApplications) !== JSON.stringify(returnedRecords)) {
         setReturnedRecords(response.data.userReturnedApplications);
-       console.log(response.data);
+      // console.log(response.data);
       }
   } catch (error) {
     console.error('Error fetching applications:', error);
@@ -233,7 +234,9 @@ const[page,setPage]=useState(false);
             >
               Dashboard
             </Typography>
+            <Logout/>
           </Toolbar>
+          
         </AppBar>
         <Drawer variant="permanent" open={open}>
           <Toolbar

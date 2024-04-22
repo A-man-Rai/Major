@@ -12,6 +12,8 @@ import FeaturedPost from './FeaturedPost';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
 import Main from './Main';
+import { useDispatch } from 'react-redux';
+import { setIsLinked, setValidUser ,setOtp,setPassword,setAdmin} from '../ReduxStore/slices/authSlice';
 
 const sections = [
   { title: 'HOME', url: '#' },
@@ -78,6 +80,12 @@ const sidebar = {
 const defaultTheme = createTheme();
 
 export default function Home() {
+const dispatch=useDispatch();
+dispatch(setValidUser(false))
+dispatch(setIsLinked(false))
+dispatch(setOtp(false))
+dispatch(setPassword(false))
+dispatch(setAdmin(false))
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />

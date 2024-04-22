@@ -15,7 +15,7 @@ import UploadButton from "./UploadButton"
 import UploadDone from './UploadDone';
 import {imageDB} from "../../firebaseConfig.js"
 import {ref,uploadBytes,getDownloadURL} from "firebase/storage"
-
+import Progress from './Progress.jsx';
 
 export default function ApplicationForm({setShowSubmitted,setShowForm,setRecords}) {
   useEffect(() => {
@@ -24,6 +24,7 @@ export default function ApplicationForm({setShowSubmitted,setShowForm,setRecords
 const [image1,setImage1]=useState(null);
 const [image2,setImage2]=useState(null);
 const [image3,setImage3]=useState(null);
+const[showDialog,setShowDialog]=useState(false);
   const dispatch=useDispatch();
   const userId=useSelector(state=>state.validUser.userId);
   const token=useSelector(state=>state.validUser.token);
@@ -106,7 +107,20 @@ const [image3,setImage3]=useState(null);
         );
   
         if (response.data.submit) {
+          
+          const response = await axios.post(
+            'http://localhost:9000/count',
+          {email:email},
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            },
+            withCredentials: true,
+          }
+          );
+          //console.log(response.data);
           setShowForm(false);
+          setShowDialog(false)
           setShowSubmitted(true);
           setRecords(data);
         }
@@ -183,7 +197,7 @@ const [image3,setImage3]=useState(null);
           {image3 ?<UploadDone set={setImage3}/>: <UploadButton name="ILP" set={setImage3}/>}
           </Box>
          <Box display="flex" justifyContent="center" alignItems="center" mt={3}>
-         <Button variant='contained' type='submit' color='success'>SUBMIT</Button>
+         <Progress showDialog={showDialog} setShowDialog={setShowDialog}></Progress>
          </Box>
        
         </Paper>

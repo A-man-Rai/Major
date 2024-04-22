@@ -12,6 +12,7 @@ import { setEmail } from '../../ReduxStore/slices/RegisterSlice';
 import { useDispatch} from 'react-redux';
 import { setForgotPassword,setInvalidEmail } from '../../ReduxStore/slices/UserSlice';
 import axios from "axios";
+import { setOtp } from '../../ReduxStore/slices/authSlice';
 import CommonNavbar from '../../CommonNavbar';
 export default function FindAccount() {
  
@@ -45,7 +46,8 @@ export default function FindAccount() {
       }
      else if(response.data.otpsend){
      dispatch(setForgotPassword(true));
-       navigate("/otp");
+     dispatch(setOtp(true))
+     navigate("/otp");
      }
    }  
    const styles={

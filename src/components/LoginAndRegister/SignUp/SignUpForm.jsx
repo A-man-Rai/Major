@@ -13,7 +13,7 @@ import axios from 'axios';
 import { useDispatch} from "react-redux";
 import { setEmail,setFirstname,setNationality,setPassword,setSurname } from '../../ReduxStore/slices/RegisterSlice.js';
 import { LoadingButton } from '@mui/lab';
-
+import { setIsLinked ,setOtp} from '../../ReduxStore/slices/authSlice.js';
 export default function SignUpForm({setInvalidPassEmail}) {
 
   const dispatch=useDispatch();
@@ -71,6 +71,7 @@ export default function SignUpForm({setInvalidPassEmail}) {
         withCredentials: true,
        });
        if(response.data.alreadyRegistered){
+        dispatch(setIsLinked(true))
          navigate("/linked");
        } 
        
@@ -80,6 +81,7 @@ export default function SignUpForm({setInvalidPassEmail}) {
         dispatch(setFirstname(formValues.firstname)); 
         dispatch(setSurname(formValues.surname)); 
         dispatch(setNationality(formValues.nationality))
+        dispatch(setOtp(true))
         navigate("/otp")
         }
         setLoading(false);

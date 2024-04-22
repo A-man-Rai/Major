@@ -19,7 +19,7 @@ export default function UsersTable({data}) {
             <TableCell align="center">FIRSTNAME</TableCell>
             <TableCell align="center">SURNAME</TableCell>
             <TableCell align="center">NATIONALITY</TableCell>
-            <TableCell align="center">PASSWORD</TableCell>
+            <TableCell align="center">TOTAL APPLICATION SUBMITTED</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -32,7 +32,7 @@ export default function UsersTable({data}) {
               <TableCell align="center">{row.firstName}</TableCell>
               <TableCell align="center">{row.surname}</TableCell>          
               <TableCell align="center">{row.nationality}</TableCell>
-              <TableCell align="center">{row.password}</TableCell>
+              <TableCell align="center">{row.submitted}</TableCell>
             </TableRow>
           ))}
         </TableBody>

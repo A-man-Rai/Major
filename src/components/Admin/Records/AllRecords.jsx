@@ -5,7 +5,7 @@ import axios from 'axios';
 const AllRecords =({setPage,all,title,records,setDetails,setShowRecords,setApplication,setApproved,setReturned,show,setShowButtons,setLinks}) => {
  
   const handleViewDetails =async(application) => {
-   console.log(application);
+ //  console.log(application);
     const response = await axios.get(
       `http://localhost:9001/links/${application.id}` ,
       {

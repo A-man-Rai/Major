@@ -33,7 +33,7 @@ const AllDetailsPage = ({users,links,page,application, setShowRecords,setReturne
     },
     withCredentials: true,
   })
-  console.log(response2.data);
+  //console.log(response2.data);
     setRecords(prevRecords => prevRecords.filter(record => record.id !==application.id));
     setDetails(false);
     if(page){
@@ -64,14 +64,14 @@ const AllDetailsPage = ({users,links,page,application, setShowRecords,setReturne
 
   const handleReject=async(id)=>{
     try {
-      console.log(localStorage.getItem("token"));
+      //console.log(localStorage.getItem("token"));
     const response=await axios.patch(`http://localhost:9001/reject/${id}`,{},{
       headers: {
         'Authorization':`Bearer ${localStorage.getItem("token")}`
       },
       withCredentials: true,
     })
-    console.log(response.data);
+  //  console.log(response.data);
         setRecords(prevRecords => prevRecords.filter(record => record.id !== id));
     } 
     catch (error) {
@@ -92,7 +92,7 @@ const AllDetailsPage = ({users,links,page,application, setShowRecords,setReturne
   const starting="https://firebasestorage.googleapis.com/v0/b/documentsupload-e023f.appspot.com/o/"
   const arr=email.split("@");
   const folder=arr[0];
-  console.log(links);
+  //console.log(links);
   const images=[{link:starting + folder + links[0].link,name:"first"},
                {link:starting + folder + links[1].link,name:"second"},
                {link:starting + folder + links[2].link,name:"third"}]

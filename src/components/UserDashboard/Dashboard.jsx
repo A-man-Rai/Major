@@ -101,7 +101,7 @@ const Dashboard = () => {
             withCredentials: true,
           }
         );
-       console.log(response.data.userApplications);
+      // console.log(response.data.userApplications);
         if (JSON.stringify(response.data.userApplications) !== JSON.stringify(records)) {
           setRecords(response.data.userApplications);      
         }     
