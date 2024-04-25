@@ -29,7 +29,9 @@ const AllDetails = ({application,setDetails,setShowStatus,links}) => {
   const link=links.userImages
   const images=[{link:starting + folder + link[0].link,name:"first"},
                {link:starting + folder + link[1].link,name:"second"},
-               {link:starting + folder + link[2].link,name:"third"}]
+               {link:starting + folder + link[2].link,name:"third"},
+               {link:starting + folder + link[3].link,name:"fourth"},
+              ]
 
   return (
     <Box>

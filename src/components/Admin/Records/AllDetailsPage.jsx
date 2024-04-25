@@ -5,6 +5,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import axios from 'axios';
 import Return from './Return.jsx';
 import ShowDocuments from '../../UserDashboard/ShowDocuments.jsx';
+import {ref,uploadBytes,getDownloadURL} from "firebase/storage"
+import { imageDB } from '../../../firebaseConfig.js';
 const AllDetailsPage = ({users,links,page,application, setShowRecords,setReturned,setDetails ,setRecords,showButtons}) => {
   const styles = {
     paper: {
@@ -33,8 +35,36 @@ const AllDetailsPage = ({users,links,page,application, setShowRecords,setReturne
     },
     withCredentials: true,
   })
-  //console.log(response2.data);
-    setRecords(prevRecords => prevRecords.filter(record => record.id !==application.id));
+  const data=JSON.stringify(application);
+  const arr=data.split(",")
+  const response=await axios.post(`http://localhost:9001/pdf`,{content:arr},{
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    withCredentials: true,
+  }) 
+  const pdfData = response.data.data; // Assuming the PDF data is stored in the `data` property
+  const filename = response.data.name;
+  const blob = new Blob([pdfData], { type: 'application/pdf' });
+  const array=email.split("@");
+  //console.log(array);
+  const folder=array[0];
+  const pdfRef=ref(imageDB,`/pdf/${folder}/${filename}`)
+  const a= await uploadBytes(pdfRef,blob)
+  const url=await getDownloadURL(a.ref)
+  //console.log(url);
+  const index = url.indexOf(array[0]);
+  const links = index !== -1 ? [url.slice(0, index), url.slice(index + array[0].length)] : [url];
+  const link=links[1];
+  const response3=await axios.post(`http://localhost:9000/pdf`,{userId:application.userId,name:filename,link:link},{
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    withCredentials: true,
+  }) 
+  //console.log(response3.data);
+
+  setRecords(prevRecords => prevRecords.filter(record => record.id !==application.id));
     setDetails(false);
     if(page){
       setShowRecords(true);
@@ -95,7 +125,8 @@ const AllDetailsPage = ({users,links,page,application, setShowRecords,setReturne
   //console.log(links);
   const images=[{link:starting + folder + links[0].link,name:"first"},
                {link:starting + folder + links[1].link,name:"second"},
-               {link:starting + folder + links[2].link,name:"third"}]
+               {link:starting + folder + links[2].link,name:"third"},
+               {link:starting + folder + links[3].link,name:"fourth"}]
           
   return (
     <Box>

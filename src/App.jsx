@@ -8,14 +8,16 @@ import FindAccount from './components/LoginAndRegister/FindAccount/FindAccount';
 import NewPassword from './components/LoginAndRegister/FindAccount/NewPassword';
 import Dashboard from './components/UserDashboard/Dashboard';
 import AccountAlreadyLinked from './components/LoginAndRegister/SignUp/AccountAlreadyLinked';
-import ApplicationSubmitted from './components/RapForm/ApplicationSubmitted';
 import AdminDashboard from './components/Admin/Dashboard/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
-import ProtectIsLinked from "./components/ProtectIsLinked"
-import ProtectOtp from "./components/ProtectOtp"
-import ProtectPassword from "./components/ProtectPassword"
-import ProtectAdmin from "./components/ProtectAdmin"
+import NotFoundPage from './NotFoundPage';
+import { useSelector } from "react-redux";
 function App() {
+  const admin = useSelector(state=>state.auth.isAdmin);
+  const user = useSelector(state=>state.auth.validUser);
+  const linked = useSelector(state=>state.auth.isLinked);
+  const otp = useSelector(state=>state.auth.otp);
+  const password = useSelector(state=>state.auth.newpassword);
   const router = createBrowserRouter([
     {
       path: '/',
@@ -27,7 +29,7 @@ function App() {
     },
     {
       path: '/otp',
-      element:<ProtectOtp><OtpPage/></ProtectOtp>
+      element:<ProtectedRoute auth={otp}><OtpPage/></ProtectedRoute>
     },
     {
       path: '/find',
@@ -35,15 +37,15 @@ function App() {
     },
     {
       path: '/newpassword',
-      element: <ProtectPassword><NewPassword /></ProtectPassword>
+      element: <ProtectedRoute auth={password}><NewPassword /></ProtectedRoute>
     },
     {
       path: '/login/dashboard',
-      element:<ProtectedRoute><Dashboard/></ProtectedRoute>
+      element:<ProtectedRoute auth={user}><Dashboard/></ProtectedRoute>
     },
     {
       path: '/linked',
-      element:<ProtectIsLinked><AccountAlreadyLinked /></ProtectIsLinked> 
+      element:<ProtectedRoute auth={linked}><AccountAlreadyLinked /></ProtectedRoute> 
     },
     {
       path: '/admin',
@@ -51,7 +53,11 @@ function App() {
     },
     {
       path: '/admin/dashboard',
-      element:<ProtectAdmin> <AdminDashboard/></ProtectAdmin>
+      element:<ProtectedRoute auth={admin}> <AdminDashboard/></ProtectedRoute>
+    },
+    {
+     path:"*",
+     element:<NotFoundPage/>
     }
   ]);
 

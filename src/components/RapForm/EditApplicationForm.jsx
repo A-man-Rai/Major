@@ -79,14 +79,17 @@ const token=useSelector(state=>state.validUser.token);
  const[image1,setImage1]=useState(null);
  const[image2,setImage2]=useState(null);
  const[image3,setImage3]=useState(null);
+ const[image4,setImage4]=useState(null);
  const email=useSelector(state=>state.register.email)
  const starting="https://firebasestorage.googleapis.com/v0/b/documentsupload-e023f.appspot.com/o/"
  const arr=email.split("@");
  const folder=arr[0];
  const images=[{link:starting + folder + editImages[0].link,name:"first"},
               {link:starting + folder + editImages[1].link,name:"second"},
-              {link:starting + folder + editImages[2].link,name:"third"}]
-            console.log(images);
+              {link:starting + folder + editImages[2].link,name:"third"},
+              {link:starting + folder + editImages[3].link,name:"third"},
+            ]
+           
   return (
     <React.Fragment>
       <CssBaseline />
@@ -138,6 +141,7 @@ const token=useSelector(state=>state.validUser.token);
          
           <Box display="flex" justifyContent="space-evenly" mt={3}>
           <ShowDocuments images={images}></ShowDocuments>
+          {image4 ?<UploadDone set={setImage4}/>: <UploadEditButton formId={editImages[3].formId} setEditImages={setEditImages} id={editImages[3].id} name="PASSPHOTO" set={setImage4}/>}
           {image1 ?<UploadDone set={setImage1}/>: <UploadEditButton formId={editImages[0].formId} setEditImages={setEditImages} id={editImages[0].id} name="PASSPORT" set={setImage1} /> }
           {image2 ?<UploadDone set={setImage2}/>: <UploadEditButton formId={editImages[1].formId} setEditImages={setEditImages} id={editImages[1].id} name="VISA" set={setImage2}/> }
           {image3 ?<UploadDone set={setImage3}/>: <UploadEditButton formId={editImages[2].formId} setEditImages={setEditImages} id={editImages[2].id} name="ILP" set={setImage3}/>}

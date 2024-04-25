@@ -21,6 +21,7 @@ export default function ApplicationForm({setShowSubmitted,setShowForm,setRecords
   useEffect(() => {
   window.scrollTo(0, 0);
 }, []);
+const[image4,setImage4]=useState(null)
 const [image1,setImage1]=useState(null);
 const [image2,setImage2]=useState(null);
 const [image3,setImage3]=useState(null);
@@ -81,19 +82,23 @@ const[showDialog,setShowDialog]=useState(false);
         const image1Ref=ref(imageDB,`${folder}/${Date.now()}-${image1.name}`)
         const image2Ref=ref(imageDB,`${folder}/${Date.now()}-${image2.name}`)
         const image3Ref=ref(imageDB,`${folder}/${Date.now()}-${image3.name}`)
-
+        const image4Ref=ref(imageDB,`${folder}/${Date.now()}-${image4.name}`)
         const a= await uploadBytes(image1Ref,image1)
         const b= await uploadBytes(image2Ref,image2)
         const c= await uploadBytes(image3Ref,image3)
+        const d= await uploadBytes(image4Ref,image4)
         const urlA=await getDownloadURL(a.ref)
         const urlB=await getDownloadURL(b.ref)
         const urlC=await getDownloadURL(c.ref)
+        const urlD=await getDownloadURL(d.ref)
           const array1=urlA.split(folder)
           const array2=urlB.split(folder)
           const array3=urlC.split(folder)
+          const array4=urlD.split(folder)
           data.urlA=array1[1];
           data.urlB=array2[1];
           data.urlC=array3[1];
+          data.urlD=array4[1];
          // console.log(array1)
         const response = await axios.post(
           'http://localhost:9001/submit',
@@ -117,8 +122,11 @@ const[showDialog,setShowDialog]=useState(false);
             },
             withCredentials: true,
           }
+        
           );
-          //console.log(response.data);
+          console.log("here");
+          console.log(response.data);
+        
           setShowForm(false);
           setShowDialog(false)
           setShowSubmitted(true);
@@ -192,6 +200,7 @@ const[showDialog,setShowDialog]=useState(false);
 
           <Field id={"travelArrangement"} placeholder={"Travel arrangement made by"} handleFieldChange={handleFieldChange} data={data}/>
           <Box display="flex" justifyContent="space-evenly">
+          {image4 ?<UploadDone set={setImage4}/>: <UploadButton name="PASSPHOTO" set={setImage4}/>}
           {image1 ?<UploadDone set={setImage1}/>: <UploadButton name="PASSPORT" set={setImage1} /> }
           {image2 ?<UploadDone set={setImage2}/>: <UploadButton name="VISA" set={setImage2}/> }
           {image3 ?<UploadDone set={setImage3}/>: <UploadButton name="ILP" set={setImage3}/>}

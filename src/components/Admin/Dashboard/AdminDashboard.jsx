@@ -135,6 +135,9 @@ export default function AdminDashboard() {
   const fetchUsers=async()=>{
     try {
       const response = await axios.get('http://localhost:9000/user',{
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem("token")}`
+        },
         withCredentials: true,
       });
    //  console.log(response.data);
@@ -149,7 +152,10 @@ export default function AdminDashboard() {
 
   const fetchApprovedApplications = async () => {
     try {
-      const response = await axios.get('http://localhost:9001/approved', {
+      const response = await axios.get('http://localhost:9001/approved', { 
+          headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`
+      },
         withCredentials: true,
       });
      // console.log(response.data.userApprovedApplications);
@@ -270,7 +276,7 @@ const[page,setPage]=useState(false);
 
     <ListItemButton onClick={handleReturned}>
       <ListItemIcon>
-        <BarChartIcon />
+      <AssignmentIcon />
       </ListItemIcon>
       <ListItemText primary="Returned Records" />
     </ListItemButton>

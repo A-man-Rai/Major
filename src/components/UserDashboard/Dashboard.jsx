@@ -15,7 +15,7 @@ import axios from 'axios';
 import { setSession } from '../ReduxStore/slices/ValidUserSlice';
 import EditApplicationForm from '../RapForm/EditApplicationForm';
 import SessionExpired from './SessionExpired';
-
+import Pdf from "./Pdf"
 const defaultTheme = createTheme();
 const Dashboard = () => {
   const dispatch=useDispatch();
@@ -55,13 +55,14 @@ const Dashboard = () => {
     setShowDownload(false); 
     setShowStatus(true);
   }
-
+  const[pdfLinks,setPdfLinks]=useState([])
   const [records,setRecords]=useState([]);
   const userId=useSelector(state=>state.validUser.userId);
   const token=useSelector(state=>state.validUser.token)
   useEffect(()=>{
    fetchApplications();
-  },[records])
+   fetchPdfLinks();
+  },[records,pdfLinks])
   useEffect(() => {
     const checkSession = async () => {
       try {
@@ -88,7 +89,24 @@ const Dashboard = () => {
     const intervalId = setInterval(checkSession, intervalTime);
     return () => clearInterval(intervalId);
   }, []); 
+
   
+  const fetchPdfLinks=async()=>{
+    const response = await axios.get(
+      `http://localhost:9000/pdf/${userId}` ,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        withCredentials: true,
+      }
+    ); 
+     
+    if (JSON.stringify(response.data.data) !== JSON.stringify(pdfLinks)) {
+      setPdfLinks(response.data.data);  
+      console.log(pdfLinks);    
+    } 
+  }
 
   const fetchApplications = async () => {
     try {
@@ -183,6 +201,7 @@ const Dashboard = () => {
            <SessionExpired/>
           {showForm && <ApplicationForm setShowSubmitted={setShowSubmitted} setShowForm={setShowForm} setRecords={setRecords}></ApplicationForm>}
           {submitted && <ApplicationSubmitted   setShowSubmitted={setShowSubmitted} setShowForm={setShowForm}></ApplicationSubmitted>}
+          {showDownload && <Pdf links={pdfLinks}/>}
           {showStatus && <AllUserApplications setEditImages={setEditImages}  setEdit={setEdit}  setShowStatus={setShowStatus}  setApplication={setApplication} setDetails={setDetails} records={records} setLinks={setLinks}></AllUserApplications>}
           {details && <AllDetails application={application} setShowStatus={setShowStatus} setDetails={setDetails} links={links}></AllDetails>}
           {edit && <EditApplicationForm setEditImages={setEditImages} editImages={editImages} application={application} setEdit={setEdit} setShowSubmitted={setShowSubmitted} setRecords={setRecords}></EditApplicationForm>}
