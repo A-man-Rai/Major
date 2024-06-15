@@ -12,9 +12,10 @@ import AdminDashboard from './components/Admin/Dashboard/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import NotFoundPage from './NotFoundPage';
 import { useSelector } from "react-redux";
+import ProtectUserDashboard from "./components/protectUserDashboard"
+import ProtectAdminDashboard from "./components/ProtectAdminDashboard"
 function App() {
-  const admin = useSelector(state=>state.auth.isAdmin);
-  const user = useSelector(state=>state.auth.validUser);
+
   const linked = useSelector(state=>state.auth.isLinked);
   const otp = useSelector(state=>state.auth.otp);
   const password = useSelector(state=>state.auth.newpassword);
@@ -41,7 +42,7 @@ function App() {
     },
     {
       path: '/login/dashboard',
-      element:<ProtectedRoute auth={user}><Dashboard/></ProtectedRoute>
+      element:<ProtectUserDashboard><Dashboard/></ProtectUserDashboard>
     },
     {
       path: '/linked',
@@ -53,7 +54,7 @@ function App() {
     },
     {
       path: '/admin/dashboard',
-      element:<ProtectedRoute auth={admin}> <AdminDashboard/></ProtectedRoute>
+      element:<ProtectAdminDashboard> <AdminDashboard/></ProtectAdminDashboard>
     },
     {
      path:"*",

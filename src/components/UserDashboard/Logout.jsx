@@ -8,7 +8,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useNavigate} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUserId,setToken } from '../ReduxStore/slices/ValidUserSlice';
-import { setValidUser } from '../ReduxStore/slices/authSlice';
 
 export default function Logout() {
   const [open, setOpen] = React.useState(false);
@@ -17,8 +16,10 @@ export default function Logout() {
   const handleClickOpen = () => {setOpen(true);};
   const handleClose = () => {setOpen(false)};
   const handleLogout=()=>{
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("email");
     setOpen(false);
-    dispatch(setValidUser(false))
     dispatch(setUserId(""));
     dispatch(setToken(""));
     navigate("/",{replace:true});

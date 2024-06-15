@@ -35,14 +35,20 @@ const AllDetailsPage = ({users,links,page,application, setShowRecords,setReturne
     },
     withCredentials: true,
   })
-  const data=JSON.stringify(application);
-  const arr=data.split(",")
-  const response=await axios.post(`http://localhost:9001/pdf`,{content:arr},{
+  //const data=JSON.stringify(application);
+  //const arr=data.split(",")
+  const response=await axios.post(`http://localhost:9001/pdf`,{application},{
     headers: {
       'Authorization': `Bearer ${token}`
     },
     withCredentials: true,
   }) 
+  const respo = await axios.post(
+    'http://localhost:9000/approve',
+  {userId:application.userId},
+  {
+    withCredentials: true,
+  })
   const pdfData = response.data.data; // Assuming the PDF data is stored in the `data` property
   const filename = response.data.name;
   const blob = new Blob([pdfData], { type: 'application/pdf' });
@@ -63,7 +69,8 @@ const AllDetailsPage = ({users,links,page,application, setShowRecords,setReturne
     withCredentials: true,
   }) 
   //console.log(response3.data);
-
+  const response4=await axios.post("http://localhost:9001/approved",{},{withCredentials: true})
+ //console.log(response4.data);
   setRecords(prevRecords => prevRecords.filter(record => record.id !==application.id));
     setDetails(false);
     if(page){
@@ -92,7 +99,7 @@ const AllDetailsPage = ({users,links,page,application, setShowRecords,setReturne
   }
   }
 
-  const handleReject=async(id)=>{
+  const handleReject=async(id,userId)=>{
     try {
       //console.log(localStorage.getItem("token"));
     const response=await axios.patch(`http://localhost:9001/reject/${id}`,{},{
@@ -101,7 +108,15 @@ const AllDetailsPage = ({users,links,page,application, setShowRecords,setReturne
       },
       withCredentials: true,
     })
+      const respo = await axios.post(
+    'http://localhost:9000/approve',
+  {userId:userId},
+  {
+    withCredentials: true,
+  })
   //  console.log(response.data);
+  const response2=await axios.post("http://localhost:9001/rejected",{},{withCredentials: true})
+  console.log(response2.data);
         setRecords(prevRecords => prevRecords.filter(record => record.id !== id));
     } 
     catch (error) {
@@ -195,7 +210,7 @@ const AllDetailsPage = ({users,links,page,application, setShowRecords,setReturne
                 APPROVE
               </Button>
               <Return handleReturn={handleReturn} id={application.id}></Return>
-              <Button variant="contained" color="error" onClick={()=>handleReject(application.id)}>
+              <Button variant="contained" color="error" onClick={()=>handleReject(application.id,application.userId)}>
                 REJECT
               </Button>
             </Box>}

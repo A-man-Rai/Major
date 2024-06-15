@@ -58,7 +58,7 @@ const Dashboard = () => {
   const[pdfLinks,setPdfLinks]=useState([])
   const [records,setRecords]=useState([]);
   const userId=useSelector(state=>state.validUser.userId);
-  const token=useSelector(state=>state.validUser.token)
+
   useEffect(()=>{
    fetchApplications();
    fetchPdfLinks();
@@ -70,10 +70,11 @@ const Dashboard = () => {
           `http://localhost:9000/verify`,
           {
             headers: {
-              'Authorization': `Bearer ${token}`
+              'Authorization': `Bearer ${localStorage.getItem("userToken")}`
             },
             withCredentials: true,
           }
+          
         );
       } catch (error) {
         if (error.response && error.response.status === 401) {
@@ -93,10 +94,10 @@ const Dashboard = () => {
   
   const fetchPdfLinks=async()=>{
     const response = await axios.get(
-      `http://localhost:9000/pdf/${userId}` ,
+      `http://localhost:9000/pdf/${localStorage.getItem("userId")}` ,
       {
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${localStorage.getItem("userToken")}`
         },
         withCredentials: true,
       }
@@ -104,17 +105,17 @@ const Dashboard = () => {
      
     if (JSON.stringify(response.data.data) !== JSON.stringify(pdfLinks)) {
       setPdfLinks(response.data.data);  
-      console.log(pdfLinks);    
+     
     } 
   }
 
   const fetchApplications = async () => {
     try {
         const response = await axios.get(
-          `http://localhost:9001/applications/${userId}` ,
+          `http://localhost:9001/applications/${localStorage.getItem("userId")}` ,
           {
             headers: {
-              'Authorization': `Bearer ${token}`
+              'Authorization': `Bearer ${localStorage.getItem("userToken")}`
             },
             withCredentials: true,
           }
@@ -126,7 +127,7 @@ const Dashboard = () => {
     } 
     catch (error) {
       if (error.response && error.response.status === 401) {
-         dispatch(setSession(true));
+        dispatch(setSession(true));
        // console.log('Token expired. Please log in again.');
       } else {
         console.error('An error occurred:', error);

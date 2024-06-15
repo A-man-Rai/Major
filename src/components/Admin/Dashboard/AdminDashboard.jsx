@@ -28,6 +28,8 @@ import axios from 'axios';
 import AllDetailsPage from '../Records/AllDetailsPage';
 import UsersTable from '../Users/UsersTable';
 import Logout from './Logout';
+import Total from "../Total"
+import ApprovedRecords from "../Records/ApprovedRecords"
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -121,15 +123,29 @@ export default function AdminDashboard() {
   const [approvedApplications,setApprovedApplications]=useState([]);
   const [returnedRecords, setReturnedRecords] = useState([]);
   const [users,setUsers]=useState([]);
-  
+  const [count,setCount]=useState([]);
   useEffect(() => {
     
     fetchApprovedApplications();
     fetchApplications();
     fetchReturnedApplications();
-   
+    getAllCount();
   },[records,approvedApplications,returnedRecords]);
  
+  const getAllCount=async()=>{
+  try{
+    const response = await axios.get('http://localhost:9001/all',{
+      withCredentials: true,
+    });
+    setCount(response.data.current)
+    
+   // console.log(response.data.current);
+  }
+  catch(err){
+   console.log(err.message)
+  }
+  }
+
   useEffect(()=>{fetchUsers();},[])
 
   const fetchUsers=async()=>{
@@ -305,7 +321,45 @@ const[page,setPage]=useState(false);
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <Grid >
+      {dashboard &&    <Grid container spacing={3} mb={3}>
+              <Grid item xs={12} md={4} lg={4}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: 200,
+                  }}
+                >
+                  <Total title={"Total Applications Received"} count={count.records}/>
+                </Paper>
+              </Grid>
+              <Grid item xs={12} md={4} lg={4}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: 200,
+                  }}
+                >
+                  <Total title={"Total Applications Approved"} count={count.approved}/>
+                </Paper>
+              </Grid>
+              <Grid item xs={12} md={4} lg={4}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: 200,
+                  }}
+                >
+                  <Total title={"Total Applications Rejected"} count={count.rejected}/>
+                </Paper>
+              </Grid>
+              </Grid> }
+          <Grid item xs={12}> 
           {dashboard && <UsersTable data={users}/>}
           {showRecords && <AllRecords title={"PENDING APPLICATIONS"} records={records} setDetails={setDetails} setShowRecords={setShowRecords} setApplication={setApplication} 
           setApproved={setApproved}  setPage={setPage} show={true} setShowButtons={setShowButtons} setReturned={setReturned} all={true} setLinks={setLinks}></AllRecords>}
@@ -315,9 +369,9 @@ const[page,setPage]=useState(false);
           {returned && <AllRecords setLinks={setLinks} title={"RETURNED APPLICATIONS"} records={returnedRecords} setDetails={setDetails} setShowRecords={setShowRecords} setApplication={setApplication} 
           setApproved={setApproved} setReturned={setReturned} show={true}  setShowButtons={setShowButtons} all={false} setPage={setPage} 
           ></AllRecords>} 
-          {approved &&  <AllRecords setLinks={setLinks} title={"APPROVED APPLICATIONS"} records={approvedApplications} setDetails={setDetails} setShowRecords={setShowRecords} setApplication={setApplication} 
-          setApproved={setApproved} setReturned={setReturned} show={false} setShowButtons={setShowButtons} all={false} setPage={setPage} 
-          ></AllRecords> }
+          {approved &&  <ApprovedRecords setLinks={setLinks} title={"APPROVED APPLICATIONS"} records={approvedApplications} setDetails={setDetails} setShowRecords={setShowRecords} setApplication={setApplication} 
+          setApproved={setApproved} setReturned={setReturned} show={false} setShowButtons={setShowButtons} all={false} setPage={setPage}  users={users} fetchApprovedApplications={fetchApprovedApplications}
+          ></ApprovedRecords> }
           </Grid>
           </Container>
         </Box>

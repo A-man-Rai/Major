@@ -40,7 +40,7 @@ const AllRecords =({setPage,all,title,records,setDetails,setShowRecords,setAppli
         {records.map(application => (
           <React.Fragment key={application.id}>
             <ListItem>
-              <ListItemText primary={application.name} secondary={`Date of Visit: ${formatDate(application.dateOfVisit)}`} />
+              <ListItemText primary={<>ID: {application.id}<br></br>NAME: {application.name}<br></br>USER ID :{application.userId}</>} secondary={`Date of Visit: ${formatDate(application.dateOfVisit)}`} />
               {title==="RETURNED APPLICATIONS"  && <ListItemText primary={`RETURNED : ${application.returned}`} />}
               <Button variant="contained" onClick={()=>handleViewDetails(application)}>View Details</Button>
             </ListItem>

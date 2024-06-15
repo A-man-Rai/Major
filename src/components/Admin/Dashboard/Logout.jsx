@@ -16,7 +16,7 @@ export default function Logout() {
   const handleClose = () => {setOpen(false)};
   const handleLogout=()=>{
     setOpen(false);
-    localStorage.setItem("token","")
+    localStorage.removeItem("token")
     navigate("/admin",{replace:true});
   }
   const styles={    paper: {

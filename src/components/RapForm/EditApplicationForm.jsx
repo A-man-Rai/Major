@@ -20,7 +20,7 @@ export default function EditApplicationForm({setEditImages,editImages,applicatio
   window.scrollTo(0, 0);
 }, []);
 const dispatch=useDispatch();
-const token=useSelector(state=>state.validUser.token);
+const token=localStorage.getItem("userToken");
 
   const [data, setData] = useState({
     id:application.id,
@@ -80,7 +80,7 @@ const token=useSelector(state=>state.validUser.token);
  const[image2,setImage2]=useState(null);
  const[image3,setImage3]=useState(null);
  const[image4,setImage4]=useState(null);
- const email=useSelector(state=>state.register.email)
+ const email=localStorage.getItem("email")
  const starting="https://firebasestorage.googleapis.com/v0/b/documentsupload-e023f.appspot.com/o/"
  const arr=email.split("@");
  const folder=arr[0];

@@ -17,7 +17,6 @@ import { useDispatch, useSelector,  } from 'react-redux';
 import { setFirstname,setSurname,setEmail } from '../../ReduxStore/slices/RegisterSlice';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { setUserId,setToken } from '../../ReduxStore/slices/ValidUserSlice';
-import { setValidUser} from '../../ReduxStore/slices/authSlice';
 
 const defaultTheme = createTheme();
 
@@ -33,14 +32,19 @@ export default function Form() {
     });
    // console.log(response.data)
     if(response.data.validUser){
-    
-      dispatch(setValidUser(true))
-      dispatch(setToken(response.data.token))
+      
+      localStorage.setItem("userToken",response.data.token);
+     
       dispatch(setFirstname(response.data.user.firstname));
       dispatch(setSurname(response.data.user.surname));
-      dispatch(setUserId(response.data.user.id));
-      dispatch(setEmail(response.data.user.email))
+     
+      localStorage.setItem("userId",response.data.user.id)
+      localStorage.setItem("email",response.data.user.email)
+
       navigate("/login/dashboard");
+    
+     
+      
     }
     else if(response.data.invalidUser){
        setInvalidPassEmail(true);

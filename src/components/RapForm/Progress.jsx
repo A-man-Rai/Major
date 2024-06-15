@@ -18,13 +18,11 @@ import LinearProgress from '@mui/material/LinearProgress';
 
 export default function Progress({showDialog,setShowDialog}) {
 
-  const handleClickOpen = () => {
-    setShowDialog(true);
-  };
+ 
 
   return (
     <React.Fragment>         
-      <Button variant="contained" type='submit' color='success' onClick={handleClickOpen}>
+      <Button variant="contained" type='submit' color='success' >
         SUBMIT
       </Button>
       <Dialog

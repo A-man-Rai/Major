@@ -22,7 +22,7 @@ const AllDetails = ({application,setDetails,setShowStatus,links}) => {
       marginBottom: '10px',
     },
   };
-  const email=useSelector(state=>state.register.email)
+  const email=localStorage.getItem("email")
   const starting="https://firebasestorage.googleapis.com/v0/b/documentsupload-e023f.appspot.com/o/"
   const arr=email.split("@");
   const folder=arr[0];

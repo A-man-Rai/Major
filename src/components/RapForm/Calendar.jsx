@@ -5,7 +5,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
-const Calendar = ({ id, placeholder, handleFieldChange, data }) => {
+const Calendar = ({ id, placeholder, handleFieldChange, data,maxDate,minDate }) => {
 
   return (
     <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
@@ -38,6 +38,8 @@ const Calendar = ({ id, placeholder, handleFieldChange, data }) => {
         />}
       dateFormat="dd/MM/yyyy"  // Set the desired date format
       popperPlacement="bottom-end" // Adjust the position of the date picker
+      maxDate={maxDate} 
+      minDate={minDate} 
     />
     </Box>
   );

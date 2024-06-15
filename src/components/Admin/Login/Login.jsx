@@ -16,7 +16,6 @@ import axios from "axios"
 import{ useNavigate }from "react-router-dom"
 import Alert from '@mui/material/Alert';
 import { useState } from 'react';
-import { setAdmin } from '../../ReduxStore/slices/authSlice';
 import { useDispatch } from 'react-redux';
 const defaultTheme = createTheme();
 
@@ -68,7 +67,6 @@ const navigate=useNavigate()
     // console.log(response.data);
       if(response.data.success){
         localStorage.setItem("token",response.data.token)
-        dispatch(setAdmin(true))
         navigate("/admin/dashboard")
       }
       else{
@@ -148,11 +146,11 @@ const navigate=useNavigate()
             </Button>  }
             <Grid container>
               <Grid item  container display="flex" justifyContent="center">
-              {login ? <Link href="#" variant="body2" onClick={toggle}>
+              {/*login ? <Link href="#" variant="body2" onClick={toggle}>
                   {"Don't have an account? Register"}
                 </Link> : <Link href="#" variant="body2" onClick={toggle} >
                   {"Already have an account? Log in"}
-                </Link>}
+                </Link>*/}
               </Grid>
             </Grid>
           </Box>

@@ -27,9 +27,9 @@ const [image2,setImage2]=useState(null);
 const [image3,setImage3]=useState(null);
 const[showDialog,setShowDialog]=useState(false);
   const dispatch=useDispatch();
-  const userId=useSelector(state=>state.validUser.userId);
-  const token=useSelector(state=>state.validUser.token);
-  const email=useSelector(state=>state.register.email)
+  const userId=localStorage.getItem("userId");
+  const token=localStorage.getItem("userToken");
+  const email=localStorage.getItem("email");
 
   const [data, setData] = useState({
     userId:parseInt(userId),
@@ -66,17 +66,26 @@ const[showDialog,setShowDialog]=useState(false);
 
     try {
       if (
+        data.name !=="" &&
         data.dob !== "" &&
+        data.occupation !== "" &&
+        data.nationality !== "" &&
+        data.passportNo  !== "" &&
         data.dateOfIssue !== "" &&
         data.validUpTo !== "" &&
+        data.ilpNo !== "" &&
+        data.visaNo !== "" &&
         data.visaIssue !== "" &&
         data.visaValidUpto !== "" &&
         data.dateOfVisit !== "" &&
         data.durationOfStay !== "" &&
+        data.residentialAddress !== "" &&
+        data.travelArrangement !== "" &&
         image1!=null &&
         image2!=null &&
         image3!=null 
       ) {
+        setShowDialog("true")
         const arr=email.split("@");
         const folder=arr[0];
         const image1Ref=ref(imageDB,`${folder}/${Date.now()}-${image1.name}`)
@@ -124,9 +133,10 @@ const[showDialog,setShowDialog]=useState(false);
           }
         
           );
-          console.log("here");
-          console.log(response.data);
-        
+          //console.log("here");
+          //console.log(response.data);
+         const response2=await axios.post("http://localhost:9001/records",{},{withCredentials: true})
+         console.log(response2.data);
           setShowForm(false);
           setShowDialog(false)
           setShowSubmitted(true);
@@ -174,29 +184,29 @@ const[showDialog,setShowDialog]=useState(false);
     
           <Divider sx={{ my: 1 }} />
            <Field id={"name"}  placeholder={"Name of Applicant"} handleFieldChange={handleFieldChange} data={data}/>
-           <Calendar id={"dob"} placeholder={"Date Of Birth (DD/MM/YYYY)"} handleFieldChange={handleFieldChange} data={data}></Calendar>
+           <Calendar id={"dob"} placeholder={"Date Of Birth (DD/MM/YYYY)"} handleFieldChange={handleFieldChange} data={data} maxDate={new Date('2005-12-31')}></Calendar>
            <Field id={"nationality"} placeholder={"Nationality"} handleFieldChange={handleFieldChange} data={data}/>
            <Field id={"occupation"} placeholder={"Occupation"} handleFieldChange={handleFieldChange} data={data}/>
          
           <Box display="flex" flexDirection="row" gap={2}>
           <Field id={"passportNo"} placeholder={"Passport No"} handleFieldChange={handleFieldChange} data={data}/>
-          <Calendar id={"dateOfIssue"} placeholder={"Date Of Issue"} handleFieldChange={handleFieldChange} data={data} ></Calendar>
+          <Calendar id={"dateOfIssue"} placeholder={"Date Of Issue"} handleFieldChange={handleFieldChange} data={data} maxDate={new Date()} ></Calendar>
            </Box>
 
-          <Calendar id={"validUpTo"} placeholder={"Valid up to"} handleFieldChange={handleFieldChange} data={data} ></Calendar>
+          <Calendar id={"validUpTo"} placeholder={"Valid up to"} handleFieldChange={handleFieldChange} data={data} minDate={new Date()}></Calendar>
           <Field id={"ilpNo"} placeholder={"I.L.P. No"} handleFieldChange={handleFieldChange} data={data}/>
           <Typography sx={{mt:1,mb:1,fontWeight:400}}> Visa Details:</Typography>
 
           <Box display="flex" flexDirection="row" gap={2}>
           <Field id={"visaNo"} placeholder={"1. No"} handleFieldChange={handleFieldChange} data={data}/>
-          <Calendar id={"visaIssue"} placeholder={"2. Issue"} handleFieldChange={handleFieldChange} data={data}></Calendar>
+          <Calendar id={"visaIssue"} placeholder={"2. Issue"} handleFieldChange={handleFieldChange} data={data} maxDate={new Date()}></Calendar>
           </Box>
             
-          <Calendar id={"visaValidUpto"} placeholder={"3. valid up to"} handleFieldChange={handleFieldChange} data={data}></Calendar>
+          <Calendar id={"visaValidUpto"} placeholder={"3. valid up to"} handleFieldChange={handleFieldChange} data={data} minDate={new Date()}></Calendar>
           <Field id={"residentialAddress"} placeholder={"Residential Address"} handleFieldChange={handleFieldChange} data={data}/>
-          <Calendar id={"dateOfVisit"} placeholder={"Date of visit"} handleFieldChange={handleFieldChange} data={data}></Calendar>
+          <Calendar id={"dateOfVisit"} placeholder={"Date of visit"} handleFieldChange={handleFieldChange} data={data}  minDate={new Date()}></Calendar>
          
-          <Calendar id={"durationOfStay"} placeholder={"Duration of stay "} handleFieldChange={handleFieldChange} data={data}></Calendar>
+          <Calendar id={"durationOfStay"} placeholder={"Duration of stay "} handleFieldChange={handleFieldChange} data={data} minDate={new Date()}></Calendar>
 
           <Field id={"travelArrangement"} placeholder={"Travel arrangement made by"} handleFieldChange={handleFieldChange} data={data}/>
           <Box display="flex" justifyContent="space-evenly">
